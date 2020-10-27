@@ -6,9 +6,9 @@ const form = document.getElementById('form')
 const text = document.getElementById('text')
 const amount = document.getElementById('amount')
 
-const localStorageTransaction = JSON.parse(localStorage.getItem('transactions'))
+const localStorageTransactions = JSON.parse(localStorage.getItem('transactions'));
 
-let transactions = localStorage.getItem('transactions') !== null ? localStorageTransactions : []
+let transactions = localStorage.getItem('transactions') !== null ? localStorageTransactions : [];
 
 // Add transaction
 
@@ -29,6 +29,10 @@ function addTransaction(e) {
 
         updateValues()
         updateLocalStorage()
+
+        text.value = ''
+        amount.value = ''
+        
     }
 }
 
@@ -59,13 +63,13 @@ function addTransactionList(transaction) {
 
 // Update total card
 function updateValues() {
-    const amount = transactions.map(transaction => transaction.amount)
+    const amounts = transactions.map(transaction => transaction.amount)
     
     const total = amounts.reduce((acc, item) => (acc += item), 0).toFixed(2)
 
-    const income = amounts.filter(item => item > 0).reduce((acc, itme) => (acc += item), 0).toFixed(2)
+    const income = amounts.filter(item => item > 0).reduce((acc, item) => (acc += item), 0).toFixed(2)
 
-    const expense = amounts.filter(item => item < 0).reduce(((acc, item) => (acc += item), 0) * -1).toFIxed(2)
+    const expense = (amounts.filter(item => item < 0).reduce((acc, item) => (acc += item), 0) * -1).toFixed(2)
 
     balance.innerText = `$${total}`
     money_plus.innerText = `$${income}`
@@ -75,7 +79,6 @@ function updateValues() {
 // Remove item by id
 function removeItem(id) {
     transactions = transactions.filter(transaction => transaction.id !== id)
-
     updateLocalStorage()
 }
 
